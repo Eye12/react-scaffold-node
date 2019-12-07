@@ -1,0 +1,14 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# IntelliJ project files
+out
+gen
+yarn.lock
+npm.lock
+yarn-error.log
+
+#
+.idea
+node_modules/
+dist/
+lib/
