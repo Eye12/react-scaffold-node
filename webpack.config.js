@@ -4,6 +4,7 @@ const {htmlTitle}          = require("./productInfo/index"),
       {CleanWebpackPlugin} = require('clean-webpack-plugin'),
       BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin, // 测试打包模块情况时候用
       MiniCssExtractPlugin = require("mini-css-extract-plugin"),
+      webpack              = require("webpack"),
       PurgecssPlugin       = require('purgecss-webpack-plugin'),
       glob                 = require("glob"),
       ProgressBar          = require("progress-bar-webpack-plugin"),
@@ -23,7 +24,7 @@ let progressBarOptions = {
 let getConfig = (isDev = false) => {
     const CONFIG = {
         mode: isDev ? "development" : "production",
-        entry: "./src/index",
+        entry: isDev ? ["webpack-hot-middleware/client?noInfo=true&reload=true", "./src/index"] : "./src/index",
         output: {
             publicPath: isDev ? "/" : "", // 线上地址
             path: path.resolve(__dirname, "./dist"),
@@ -176,6 +177,7 @@ let getConfig = (isDev = false) => {
         CONFIG.plugins.push(new ProgressBar(progressBarOptions), new BundleAnalyzerPlugin());
         return CONFIG;
     } else {
+        CONFIG.plugins.push(new webpack.HotModuleReplacementPlugin());
         return {
             CONFIG,
             progressBarOptions
