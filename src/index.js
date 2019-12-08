@@ -1,6 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import "./global.scss";
+import A from "./components/a";
+import B from "./components/b";
+A();
+B();
+
 
 const {Component} = React;
 
