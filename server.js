@@ -6,11 +6,10 @@ const express                      = require("express"),
       {port}                       = require("./productInfo/index"),
       {CONFIG, progressBarOptions} = require("./webpack.config")(true),
       ProgressBar                  = require("progress-bar-webpack-plugin");
-let compiler   = webpack(CONFIG); // webpack编译项目
+let compiler = webpack(CONFIG); // webpack编译项目
 app.use(webpackDevMiddleWare(compiler, {
     publicPath: CONFIG.output.publicPath
 }));
-
 new ProgressBar(progressBarOptions).apply(compiler);
 let server = app.listen(port, () => {
     let {port} = server.address();

@@ -4,9 +4,12 @@ const {htmlTitle}          = require("./productInfo/index"),
       {CleanWebpackPlugin} = require('clean-webpack-plugin'),
       BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
       MiniCssExtractPlugin = require("mini-css-extract-plugin"),
+      PurgecssPlugin = require('purgecss-webpack-plugin'),
+      glob                 = require("glob"),
       ProgressBar          = require("progress-bar-webpack-plugin"),
       HappyPack            = require("happypack"), // 开启多进程打包
       os                   = require("os"),
+      OptimizeCss          = require("optimize-css-assets-webpack-plugin"),
       chalk                = require("chalk"),
       path                 = require("path"),
       happyThreadPool      = HappyPack.ThreadPool({size: os.cpus().length});
@@ -37,6 +40,10 @@ let getConfig = (isDev = false) => {
         },
         devtool: isDev ? "cheap-module-inline-source-map" : "cheap-module-source-map",
         // devtool: isDevMode ? "cheap-module-eval-source-map" : "cheap-module-source-map",
+        optimization: {
+            minimize: true,
+            minimizer: [new OptimizeCss({})]
+        },
         module: {
             rules: [{
                 test: /\.jsx?$/i,
@@ -112,6 +119,9 @@ let getConfig = (isDev = false) => {
                 chunkFilename: isDev ? "styles/[id].css" : "styles/[id].[hash].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
+            new PurgecssPlugin({
+                paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`,  { nodir: true }),
+            }),
             new HappyPack({
                 id: 'babel',
                 // threads: 2,
@@ -122,11 +132,12 @@ let getConfig = (isDev = false) => {
                 }]
             }),
             // new BundleAnalyzerPlugin(), // 测试打包模块情况时候用
+            new DashboardPlugin(),
             new CleanWebpackPlugin(),
         ]
     };
     if (!isDev) {
-        CONFIG.plugins.push(new ProgressBar(progressBarOptions), new DashboardPlugin());
+        CONFIG.plugins.push(new ProgressBar(progressBarOptions));
         return CONFIG;
     } else {
         return {
