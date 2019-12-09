@@ -1,3 +1,8 @@
+/**
+ * @Author: wyy
+ * @Date: 2019/12/9
+ * @Description: node层启动本地服务相关配置
+ **/
 const express                      = require("express"),
       app                          = express(),
       opn                          = require("better-opn"),

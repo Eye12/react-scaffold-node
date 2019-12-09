@@ -1,3 +1,8 @@
+/**
+ * @Author: wyy
+ * @Date: 2019/12/9
+ * @Description: eslint
+ **/
 module.exports = {
     root: true,
     env: {

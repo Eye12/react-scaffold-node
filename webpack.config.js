@@ -86,102 +86,114 @@ let progressBarOptions = {
                 }
             },
             module: {
-                rules: [{
-                    enforce: "pre",
-                    test: /\.jsx?$/i,
-                    exclude: /(node_modules|bower_components)/,
-                    use: "happypack/loader?id=js-babel"
-                }, {
-                    enforce: "pre",
-                    test: /\.tsx?$/i,
-                    exclude: /(node_modules|bower_components)/,
-                    use: [{
-                        loader: "tslint-loader"
+                rules: [
+                    {
+                        enforce: "pre",
+                        test: /\.jsx?$/i,
+                        exclude: /(node_modules|bower_components)/,
+                        use: "happypack/loader?id=eslint-js"
                     }, {
-                        loader: "babel-loader?cacheDirectory=true" // cacheDirectory对于rebuild有很大提升
-                    }, {
-                        loader: "ts-loader"
-                    }]
-                }, {
-                    test: /\.(c|s[ac]ss)$/i,
-                    exclude: /(node_modules|bower_components)/,
-                    use: [
-                        {
-                            loader: MiniCssExtractPlugin.loader, // 提取压缩CSS
-                            options: {
-                                hrm: isDev,
-                                reloadAll: isDev
-                            }
-                        },
-                        {
-                            loader: "css-loader",
-                            options: {
-                                sourceMap: isDev
-                            }
-                        },
-                        {
-                            loader: "postcss-loader", // 主要使用两个插件
-                            options: {
-                                plugins: [
-                                    require("postcss-sprites")({ // 用于合成雪碧图
-                                        spritePath: "./dist/assets/images",
-                                        retina: true
-                                    }),
-                                    require("autoprefixer")() // 添加浏览器内核前缀
-                                ]
-                            }
-                        }, {
-                            loader: "sass-loader",
-                            options: {
-                                implementation: require("node-sass"),
-                                sassOptions: {
-                                    fiber: false
+                        test: /\.jsx?$/i,
+                        exclude: /(node_modules|bower_components)/,
+                        use: "happypack/loader?id=babel-js"
+                    },
+                    // {
+                    //     enforce: "pre",
+                    //     test: /\.tsx?$/i,
+                    //     exclude: /(node_modules|bower_components)/,
+                    //     use: [{
+                    //         loader: "tslint-loader"
+                    //     }]
+                    // }, {
+                    //     enforce: "pre",
+                    //     test: /\.tsx?$/i,
+                    //     exclude: /(node_modules|bower_components)/,
+                    //     use: [{
+                    //         loader: "babel-loader?cacheDirectory=true" // cacheDirectory对于rebuild有很大提升
+                    //     }, {
+                    //         loader: "ts-loader"
+                    //     }]
+                    // },
+                    {
+                        test: /\.(c|s[ac]ss)$/i,
+                        exclude: /(node_modules|bower_components)/,
+                        use: [
+                            {
+                                loader: MiniCssExtractPlugin.loader, // 提取压缩CSS
+                                options: {
+                                    hrm: isDev,
+                                    reloadAll: isDev
                                 }
+                            },
+                            {
+                                loader: "css-loader",
+                                options: {
+                                    sourceMap: isDev
+                                }
+                            },
+                            {
+                                loader: "postcss-loader", // 主要使用两个插件
+                                options: {
+                                    plugins: [
+                                        require("postcss-sprites")({ // 用于合成雪碧图
+                                            spritePath: "./dist/assets/images",
+                                            retina: true
+                                        }),
+                                        require("autoprefixer")() // 添加浏览器内核前缀
+                                    ]
+                                }
+                            }, {
+                                loader: "sass-loader",
+                                options: {
+                                    implementation: require("node-sass"),
+                                    sassOptions: {
+                                        fiber: false
+                                    }
+                                }
+                            }]
+                    }, {
+                        test: /\.(png|jpg|gif)$/i,
+                        exclude: /node_modules/,
+                        use: [
+                            {
+                                loader: 'url-loader',
+                                options: {
+                                    name: "[name].[ext]",
+                                    limit: 8192,
+                                    fallback: 'responsive-loader',
+                                    quality: 85,
+                                    outputPath: "./assets/images", // 相对于当前配置文件的
+                                    // publicPath: "../assets/images" // 打包出来的css url前面添加的公共路径
+                                },
+                            },
+                        ],
+                    }, {
+                        test: /\.(ttf|svg|woff2?|eot)|(mp3)$/i,
+                        exclude: /node_modules/,
+                        use: {
+                            loader: "url-loader",
+                            query: {
+                                name: isDev ? "[name].[ext]" : "[name][hash].[ext]",
+                                limit: 0,
+                                fallback: "file-loader",
+                                outputPath: "./assets/fonts", // 相对于当前配置文件的
+                                publicPath: "../assets/fonts", // 打包出来的css url前面添加的公共路径
                             }
-                        }]
-                }, {
-                    test: /\.(png|jpg|gif)$/i,
-                    exclude: /node_modules/,
-                    use: [
-                        {
-                            loader: 'url-loader',
-                            options: {
-                                name: "[name].[ext]",
-                                limit: 8192,
-                                fallback: 'responsive-loader',
-                                quality: 85,
-                                outputPath: "./assets/images", // 相对于当前配置文件的
-                                // publicPath: "../assets/images" // 打包出来的css url前面添加的公共路径
-                            },
-                        },
-                    ],
-                }, {
-                    test: /\.(ttf|svg|woff2?|eot)|(mp3)$/i,
-                    exclude: /node_modules/,
-                    use: {
-                        loader: "url-loader",
-                        query: {
-                            name: isDev ? "[name].[ext]" : "[name][hash].[ext]",
-                            limit: 0,
-                            fallback: "file-loader",
-                            outputPath: "./assets/fonts", // 相对于当前配置文件的
-                            publicPath: "../assets/fonts", // 打包出来的css url前面添加的公共路径
                         }
-                    }
-                }, {
-                    test: /\.(mtl|obj|stl)$/i,
-                    exclude: /node_modules/,
-                    use: [
-                        {
-                            loader: 'file-loader',
-                            options: {
-                                name: "[name].[ext]",
-                                outputPath: "./assets/dateFile",
-                                // publicPath: "../dist/assets/dateFile"
+                    }, {
+                        test: /\.(mtl|obj|stl)$/i,
+                        exclude: /node_modules/,
+                        use: [
+                            {
+                                loader: 'file-loader',
+                                options: {
+                                    name: "[name].[ext]",
+                                    outputPath: "./assets/dateFile",
+                                    // publicPath: "../dist/assets/dateFile"
+                                },
                             },
-                        },
-                    ],
-                }]
+                        ],
+                    }]
             },
             plugins: [
                 new HtmlWebpackPlugin({
@@ -206,7 +218,16 @@ let progressBarOptions = {
                     paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, {nodir: true}),
                 }),
                 new HappyPack({
-                    id: 'js-babel',
+                    id: 'babel-js',
+                    // threads: 2,
+                    threadPool: happyThreadPool, // 共享进程池
+                    verbose: true, // 允许 HappyPack 输出日志
+                    loaders: [{
+                        loader: "babel-loader?cacheDirectory=true" // cacheDirectory对于rebuild有很大提升
+                    }]
+                }),
+                new HappyPack({
+                    id: 'eslint-js',
                     // threads: 2,
                     threadPool: happyThreadPool, // 共享进程池
                     verbose: true, // 允许 HappyPack 输出日志
@@ -215,8 +236,6 @@ let progressBarOptions = {
                         options: {
                             formatter: require("eslint-friendly-formatter")
                         }
-                    }, {
-                        loader: "babel-loader?cacheDirectory=true" // cacheDirectory对于rebuild有很大提升
                     }]
                 }),
                 new DashboardPlugin(),

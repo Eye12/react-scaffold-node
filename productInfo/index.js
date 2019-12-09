@@ -5,7 +5,7 @@
  **/
 const BASE_PROJECT_INFO = {
     htmlTitle: "Magical Child",
-    entryFileName: "index.tsx",
+    entryFileName: "index.js",
     port: 3000
 };
 
