@@ -40,6 +40,9 @@ let getConfig = (isDev = false) => {
             //     "@": path.resolve(__dirname)
             // }
         },
+        // externals: {
+        //     react: "react"
+        // },
         devtool: isDev ? "cheap-module-inline-source-map" : "cheap-module-source-map",
         // devtool: isDevMode ? "cheap-module-eval-source-map" : "cheap-module-source-map",
         optimization: {
@@ -183,6 +186,10 @@ let getConfig = (isDev = false) => {
                 chunkFilename: isDev ? "styles/[id].css" : "styles/[id].[hash].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
+            // new Webpack.ProvidePlugin({
+            //     "React": "react",
+            //     "ReactDOM": "react-dom"
+            // }),
             new PurgecssPlugin({
                 paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, {nodir: true}),
             }),
@@ -200,8 +207,8 @@ let getConfig = (isDev = false) => {
         ]
     };
     if (!isDev) {
-        // CONFIG.plugins.push(new ProgressBar(progressBarOptions), new BundleAnalyzerPlugin());
-        CONFIG.plugins.push(new ProgressBar(progressBarOptions));
+        CONFIG.plugins.push(new ProgressBar(progressBarOptions), new BundleAnalyzerPlugin());
+        // CONFIG.plugins.push(new ProgressBar(progressBarOptions));
         return CONFIG;
     } else {
         CONFIG.plugins.push(new webpack.HotModuleReplacementPlugin());

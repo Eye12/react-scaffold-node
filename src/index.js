@@ -5,8 +5,6 @@ import A from "./components/a";
 import B from "./components/b";
 A();
 B();
-
-
 const {Component} = React;
 
 class Template extends Component {
