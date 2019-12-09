@@ -140,7 +140,33 @@ let getConfig = (isDev = false) => {
                         },
                     },
                 ],
-            },]
+            }, {
+                test: /\.(ttf|svg|woff2?|eot)|(mp3)$/i,
+                exclude: /node_modules/,
+                use: {
+                    loader: "url-loader",
+                    query: {
+                        name: isDev ? "[name].[ext]" : "[name][hash].[ext]",
+                        limit: 0,
+                        fallback: "file-loader",
+                        outputPath: "./assets/fonts", // 相对于当前配置文件的
+                        publicPath: "../assets/fonts", // 打包出来的css url前面添加的公共路径
+                    }
+                }
+            }, {
+                test: /\.(mtl|obj|stl)$/i,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: "[name].[ext]",
+                            outputPath: "./assets/dateFile",
+                            // publicPath: "../dist/assets/dateFile"
+                        },
+                    },
+                ],
+            }]
         },
         plugins: [
             new HtmlWebpackPlugin({
@@ -174,7 +200,8 @@ let getConfig = (isDev = false) => {
         ]
     };
     if (!isDev) {
-        CONFIG.plugins.push(new ProgressBar(progressBarOptions), new BundleAnalyzerPlugin());
+        // CONFIG.plugins.push(new ProgressBar(progressBarOptions), new BundleAnalyzerPlugin());
+        CONFIG.plugins.push(new ProgressBar(progressBarOptions));
         return CONFIG;
     } else {
         CONFIG.plugins.push(new webpack.HotModuleReplacementPlugin());
