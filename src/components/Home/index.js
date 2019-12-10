@@ -7,7 +7,7 @@
 import * as React from "react";
 
 const {Component} = React;
-import Index from "../common/Header";
+import Header from "../common/Header";
 import Body from "../common/Body";
 import Footer from "../common/Footer";
 
@@ -17,9 +17,10 @@ class Home extends Component {
     }
 
     render() {
+        console.log("=========>>>", this.props.location.state);
         return (
             <>
-                <Index title="Welcome Magical Child's World" to="/about"/>
+                <Header title="Welcome Magical Child's World" someWhere="/about"/>
                 <Body/>
                 <Footer/>
             </>

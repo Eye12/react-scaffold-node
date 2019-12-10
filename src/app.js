@@ -5,11 +5,13 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
+import { withRouter } from "react-router";
 import "./app.scss";
 import NotFound from "./components/common/404";
 import routes from "./router";
 
 const {Component} = React;
+
 class App extends Component {
     render() {
         return (

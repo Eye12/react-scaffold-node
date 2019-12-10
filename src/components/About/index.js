@@ -16,10 +16,9 @@ class About extends Component {
     }
 
     render() {
-        console.log("=========>>>", location);
         return (
             <>
-                <Header title="This is about page" to="/"/>
+                <Header title="This is about page" someWhere="/"/>
                 <Body/>
                 <Footer/>
             </>

@@ -5,23 +5,32 @@
  **/
 
 import * as React from "react";
-import {Link} from "react-router-dom";
+import {withRouter} from "react-router";
 import "./index.scss";
 
 const {Component} = React;
+
 
 class Header extends Component {
     constructor(props) {
         super(props)
     }
-
+    clickHandler = () => {
+        let {someWhere, history} = this.props;
+        history.push({
+            pathname: someWhere,
+            state: {
+                name: "lle"
+            }
+        });
+    };
     render() {
         return (
-            <Link to={this.props.to} className="header">
+            <div className="header" onClick={this.clickHandler}>
                 {this.props.title}
-            </Link>
+            </div>
         )
     }
 }
 
-export default Header;
+export default withRouter(Header);
