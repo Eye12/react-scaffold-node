@@ -2,7 +2,7 @@ const {htmlTitle, entryFileName} = require("./productInfo/index"),
       HtmlWebpackPlugin          = require("html-webpack-plugin"),
       DashboardPlugin            = require("webpack-dashboard/plugin"),
       {CleanWebpackPlugin}       = require('clean-webpack-plugin'),
-      {BundleAnalyzerPlugin}       = require('webpack-bundle-analyzer'), // 测试打包模块情况时候用
+      {BundleAnalyzerPlugin}     = require('webpack-bundle-analyzer'), // 测试打包模块情况时候用
       MiniCssExtractPlugin       = require("mini-css-extract-plugin"),
       webpack                    = require("webpack"),
       PurgecssPlugin             = require('purgecss-webpack-plugin'),
@@ -211,6 +211,9 @@ let progressBarOptions = {
                 //     "$": "jquery",
                 //     "xxx": "react-router-dom",
                 //     "ReactDOM": "react-dom",
+                // }),
+                // new webpack.ProgressPlugin({
+                //     GG: "xxx"
                 // }),
                 new PurgecssPlugin({
                     paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, {nodir: true}),
