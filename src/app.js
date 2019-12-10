@@ -1,18 +1,30 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import "./global.scss";
-const {Component} = React;
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+} from "react-router-dom";
+import "./app.scss";
+import NotFound from "./components/common/404";
+import routes from "./router";
 
+const {Component} = React;
 class App extends Component {
     render() {
-        return <div style={styles}>Hello</div>
+        return (
+            <Router>
+                <Switch>
+                    {
+                        routes && routes.map(({path, component, exact}, index) => {
+                            return <Route key={index} path={path} component={component} exact={exact}/>
+                        })
+                    }
+                    <Route component={NotFound}/>
+                </Switch>
+            </Router>
+        )
     }
 }
-
-const styles = {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "red"
-};
 
 ReactDOM.render(<App/>, document.getElementById("root"));

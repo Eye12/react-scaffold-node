@@ -5,21 +5,21 @@
  **/
 
 import * as React from "react";
-
-const {Component} = React;
-import Index from "../common/Header";
+import Header from "../common/Header";
 import Body from "../common/Body";
 import Footer from "../common/Footer";
+const {Component} = React;
 
-class Home extends Component {
+class About extends Component {
     constructor(props) {
         super(props)
     }
 
     render() {
+        console.log("=========>>>", location);
         return (
             <>
-                <Index title="Welcome Magical Child's World" to="/about"/>
+                <Header title="This is about page" to="/"/>
                 <Body/>
                 <Footer/>
             </>
@@ -27,4 +27,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default About;

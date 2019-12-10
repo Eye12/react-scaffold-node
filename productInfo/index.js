@@ -5,7 +5,7 @@
  **/
 const BASE_PROJECT_INFO = {
     htmlTitle: "Magical Child",
-    entryFileName: "index.js",
+    entryFileName: "app.js",
     port: 3000
 };
 

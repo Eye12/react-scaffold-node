@@ -2,7 +2,7 @@ const {htmlTitle, entryFileName} = require("./productInfo/index"),
       HtmlWebpackPlugin          = require("html-webpack-plugin"),
       DashboardPlugin            = require("webpack-dashboard/plugin"),
       {CleanWebpackPlugin}       = require('clean-webpack-plugin'),
-      BundleAnalyzerPlugin       = require('webpack-bundle-analyzer').BundleAnalyzerPlugin, // 测试打包模块情况时候用
+      {BundleAnalyzerPlugin}       = require('webpack-bundle-analyzer'), // 测试打包模块情况时候用
       MiniCssExtractPlugin       = require("mini-css-extract-plugin"),
       webpack                    = require("webpack"),
       PurgecssPlugin             = require('purgecss-webpack-plugin'),
@@ -44,7 +44,7 @@ let progressBarOptions = {
             //     react: "react"
             // },
             devtool: isDev ? "cheap-module-inline-source-map" : "cheap-module-source-map",
-            // devtool: isDevMode ? "cheap-module-eval-source-map" : "cheap-module-source-map",
+            // devtool: isDev ? "cheap-module-eval-source-map" : "cheap-module-source-map",
             optimization: {
                 removeAvailableModules: true, // 在所有父级块组中已经可用的模块都会被从块中移除
                 runtimeChunk: {
@@ -118,22 +118,17 @@ let progressBarOptions = {
                         test: /\.(c|s[ac]ss)$/i,
                         exclude: /(node_modules|bower_components)/,
                         use: [
-                            {
-                                loader: MiniCssExtractPlugin.loader, // 提取压缩CSS
-                                options: {
-                                    hrm: isDev,
-                                    reloadAll: isDev
-                                }
-                            },
+                            isDev ? {loader: "style-loader"} : {loader: MiniCssExtractPlugin.loader},
                             {
                                 loader: "css-loader",
                                 options: {
-                                    sourceMap: isDev
+                                    sourceMap: isDev,
                                 }
                             },
                             {
                                 loader: "postcss-loader", // 主要使用两个插件
                                 options: {
+                                    sourceMap: isDev,
                                     plugins: [
                                         require("postcss-sprites")({ // 用于合成雪碧图
                                             spritePath: "./dist/assets/images",
@@ -145,6 +140,7 @@ let progressBarOptions = {
                             }, {
                                 loader: "sass-loader",
                                 options: {
+                                    sourceMap: isDev,
                                     implementation: require("node-sass"),
                                     sassOptions: {
                                         fiber: false
@@ -205,14 +201,16 @@ let progressBarOptions = {
                     inject: true,
                     // favicon: "./favicon.ico",
                 }),
-                new MiniCssExtractPlugin({
-                    filename: isDev ? "styles/[name].css" : "styles/[name].[hash].css",
-                    chunkFilename: isDev ? "styles/[id].css" : "styles/[id].[hash].css",
-                    ignoreOrder: false, // Enable to remove warnings about conflicting order
-                }),
-                // new Webpack.ProvidePlugin({
+                // new MiniCssExtractPlugin({
+                //     filename: isDev ? "styles/[name].css" : "styles/[name].[hash].css",
+                //     chunkFilename: isDev ? "styles/[id].css" : "styles/[id].[hash].css",
+                //     ignoreOrder: false, // Enable to remove warnings about conflicting order
+                // }),
+                // new webpack.ProvidePlugin({
                 //     "React": "react",
-                //     "ReactDOM": "react-dom"
+                //     "$": "jquery",
+                //     "xxx": "react-router-dom",
+                //     "ReactDOM": "react-dom",
                 // }),
                 new PurgecssPlugin({
                     paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, {nodir: true}),

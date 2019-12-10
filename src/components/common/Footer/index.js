@@ -1,27 +1,24 @@
 /**
  * @Author: wyy
  * @Date: 2019/12/9
- * @Description: Header
+ * @Description: Footer
  **/
 
 import * as React from "react";
-import {Link} from "react-router-dom";
 import "./index.scss";
 
 const {Component} = React;
 
-class Header extends Component {
+class Footer extends Component {
     constructor(props) {
         super(props)
     }
 
     render() {
         return (
-            <Link to={this.props.to} className="header">
-                {this.props.title}
-            </Link>
+            <div className="footer" />
         )
     }
 }
 
-export default Header;
+export default Footer;
