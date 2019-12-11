@@ -17,7 +17,6 @@ class Home extends Component {
     }
 
     render() {
-        console.log("=========>>>", this.props.location.state);
         return (
             <>
                 <Header title="Welcome Magical Child's World" someWhere="/about"/>

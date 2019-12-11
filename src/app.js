@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Switch,
     Route,
 } from "react-router-dom";
-import { withRouter } from "react-router";
+import {withRouter} from "react-router";
 import "./app.scss";
 import NotFound from "./components/common/404";
 import routes from "./router";
@@ -19,7 +19,7 @@ class App extends Component {
                 <Switch>
                     {
                         routes && routes.map(({path, component, exact}, index) => {
-                            return <Route key={index} path={path} component={component} exact={exact}/>
+                            return <Route key={index} path={path} component={withRouter(component)} exact={exact}/>
                         })
                     }
                     <Route component={NotFound}/>

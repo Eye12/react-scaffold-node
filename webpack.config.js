@@ -201,17 +201,11 @@ let progressBarOptions = {
                     inject: true,
                     // favicon: "./favicon.ico",
                 }),
-                // new MiniCssExtractPlugin({
-                //     filename: isDev ? "styles/[name].css" : "styles/[name].[hash].css",
-                //     chunkFilename: isDev ? "styles/[id].css" : "styles/[id].[hash].css",
-                //     ignoreOrder: false, // Enable to remove warnings about conflicting order
-                // }),
-                // new webpack.ProvidePlugin({
-                //     "React": "react",
-                //     "$": "jquery",
-                //     "xxx": "react-router-dom",
-                //     "ReactDOM": "react-dom",
-                // }),
+                new MiniCssExtractPlugin({
+                    filename: "styles/[name].[hash].css",
+                    chunkFilename: "styles/[id].[hash].css",
+                    ignoreOrder: false, // Enable to remove warnings about conflicting order
+                }),
                 // new webpack.ProgressPlugin({
                 //     GG: "xxx"
                 // }),
@@ -244,8 +238,13 @@ let progressBarOptions = {
             ]
         };
         if (!isDev) {
-            CONFIG.plugins.push(new ProgressBar(progressBarOptions), new BundleAnalyzerPlugin());
-            // CONFIG.plugins.push(new ProgressBar(progressBarOptions));
+            // +++++ new BundleAnalyzerPlugin()
+            CONFIG.plugins.push(new webpack.ProvidePlugin({
+                "React": "react",
+                "$": "jquery",
+                "xxx": "react-router-dom",
+                "ReactDOM": "react-dom",
+            }), new ProgressBar(progressBarOptions));
             return CONFIG;
         } else {
             CONFIG.plugins.push(new webpack.HotModuleReplacementPlugin());

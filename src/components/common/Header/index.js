@@ -3,10 +3,9 @@
  * @Date: 2019/12/9
  * @Description: Header
  **/
-
 import * as React from "react";
-import {withRouter} from "react-router";
 import "./index.scss";
+import {withRouter} from "react-router";
 
 const {Component} = React;
 
