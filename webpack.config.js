@@ -242,7 +242,6 @@ let progressBarOptions = {
             CONFIG.plugins.push(new webpack.ProvidePlugin({
                 "React": "react",
                 "$": "jquery",
-                "xxx": "react-router-dom",
                 "ReactDOM": "react-dom",
             }), new ProgressBar(progressBarOptions));
             return CONFIG;
