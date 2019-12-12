@@ -5,6 +5,7 @@
  **/
 
 import * as React from "react";
+import {NavLink} from "react-router-dom";
 import "./index.scss";
 
 const {Component} = React;
@@ -16,7 +17,9 @@ class Body extends Component {
 
     render() {
         return (
-            <div className="c-body" />
+            <div className="c-body">
+                <NavLink to="/about">About</NavLink>
+            </div>
         )
     }
 }

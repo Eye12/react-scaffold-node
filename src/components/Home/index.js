@@ -17,6 +17,7 @@ class Home extends Component {
     }
 
     render() {
+        console.log("=========>>>", this.props.history);
         return (
             <>
                 <Header title="Welcome Magical Child's World" someWhere="/about"/>

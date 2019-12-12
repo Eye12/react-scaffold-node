@@ -4,6 +4,7 @@ const {htmlTitle, entryFileName} = require("./productInfo/index"),
       {CleanWebpackPlugin}       = require('clean-webpack-plugin'),
       {BundleAnalyzerPlugin}     = require('webpack-bundle-analyzer'), // 测试打包模块情况时候用
       MiniCssExtractPlugin       = require("mini-css-extract-plugin"),
+      CleanCSS                   = require('clean-css'),
       webpack                    = require("webpack"),
       PurgecssPlugin             = require('purgecss-webpack-plugin'),
       glob                       = require("glob"),
@@ -14,7 +15,9 @@ const {htmlTitle, entryFileName} = require("./productInfo/index"),
       TerserWebpackPlugin        = require("terser-webpack-plugin"), // 与optimize.minimize一起使用，压缩JS
       chalk                      = require("chalk"),
       path                       = require("path"),
-      happyThreadPool            = HappyPack.ThreadPool({size: os.cpus().length});
+      happyThreadPool            = HappyPack.ThreadPool({size: os.cpus().length}),
+      input                      = 'a{font-weight:bold;}',
+      options                    = {/* options */};
 
 let progressBarOptions = {
         format: chalk.magentaBright('  Progressing ') + chalk.magenta.bgMagenta.bold(' [:bar] ') + chalk.magentaBright(' :percent ') + chalk.greenBright(' (:elapsed seconds) '),
@@ -50,7 +53,7 @@ let progressBarOptions = {
                 runtimeChunk: {
                     name: entrypoint => `runtime~${entrypoint.name}`
                 }, // 单独提取包含chunks映射关系的list
-                usedExports: true, // 清楚无用死代码
+                usedExports: true, // 清除无用死代码
                 minimize: !isDev,
                 minimizer: isDev ? [] : [new TerserWebpackPlugin({}), new OptimizeCss({})],
                 splitChunks: {
@@ -196,7 +199,10 @@ let progressBarOptions = {
                     title: htmlTitle,
                     template: "./layout/index.html",
                     minify: {
-                        collapseWhitespace: !isDev
+                        removeComments: !isDev,
+                        collapseInlineTagWhitespace: !isDev,
+                        collapseWhitespace: !isDev,
+                        minifyCSS: !isDev
                     },
                     inject: true,
                     // favicon: "./favicon.ico",
@@ -233,17 +239,19 @@ let progressBarOptions = {
                         }
                     }]
                 }),
+                // new webpack.ProvidePlugin({
+                //     "React": "react",
+                //     "$": "jquery",
+                //     "ReactDOM": "react-dom",
+                // }),
                 new DashboardPlugin(),
                 new CleanWebpackPlugin(),
             ]
         };
         if (!isDev) {
+            new CleanCSS(options).minify(input); // 主要用于压缩写于html模板中的css
             // +++++ new BundleAnalyzerPlugin()
-            CONFIG.plugins.push(new webpack.ProvidePlugin({
-                "React": "react",
-                "$": "jquery",
-                "ReactDOM": "react-dom",
-            }), new ProgressBar(progressBarOptions));
+            CONFIG.plugins.push(new ProgressBar(progressBarOptions));
             return CONFIG;
         } else {
             CONFIG.plugins.push(new webpack.HotModuleReplacementPlugin());
