@@ -5,7 +5,9 @@
  **/
 import * as React from "react";
 import "./index.scss";
-import {withRouter} from "react-router";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import appAction from "../../../action/index";
 
 const {Component} = React;
 
@@ -14,8 +16,10 @@ class Header extends Component {
     constructor(props) {
         super(props)
     }
+
     clickHandler = () => {
         let {someWhere, history} = this.props;
+        this.props.countAction();
         history.push({
             pathname: someWhere,
             state: {
@@ -23,6 +27,7 @@ class Header extends Component {
             }
         });
     };
+
     render() {
         return (
             <div className="header" onClick={this.clickHandler}>
@@ -32,4 +37,8 @@ class Header extends Component {
     }
 }
 
-export default withRouter(Header);
+const mapDispatchToProps = (dispatch) => ( {
+    countAction: () => dispatch(appAction)
+} );
+
+export default connect(undefined, mapDispatchToProps)(withRouter(Header));

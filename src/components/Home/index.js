@@ -5,6 +5,7 @@
  **/
 
 import * as React from "react";
+import {connect} from "react-redux";
 
 const {Component} = React;
 import Header from "../common/Header";
@@ -17,7 +18,7 @@ class Home extends Component {
     }
 
     render() {
-        console.log("=========>>>", this.props.history);
+        console.log("=========>>>", this.props.appState);
         return (
             <>
                 <Header title="Welcome Magical Child's World" someWhere="/about"/>
@@ -27,5 +28,10 @@ class Home extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        appState: state
+    }
+};
 
-export default Home;
+export default connect(mapStateToProps)(Home);
